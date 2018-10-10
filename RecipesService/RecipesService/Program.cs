@@ -1,6 +1,8 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,6 +66,12 @@ namespace RecipesService
 
             foreach (var href in hrefs)
                 Process.Start("chrome.exe", href);
+
+            using (var file = File.OpenWrite("./recipes.txt"))
+            {
+                var text = JsonConvert.SerializeObject(response.Results);
+                file.Write(Encoding.UTF8.GetBytes(text), 0, text.Length);
+            }
 
             Console.Read();
         }
